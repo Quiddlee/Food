@@ -43,12 +43,23 @@ window.addEventListener('DOMContentLoaded', () => {
     const deadLine = '2022-12-4';
 
     function getTimeRemaining(endtime) {
+        let days, hours, minutes, seconds;
         const total = Date.parse(endtime) - Date.parse(new Date()); //вычисляем разницу между дедлайном и датой пользователя
-        const days = Math.floor(total / (1000 * 60 * 60 * 24));     //1000 - кол-во миллисекунд в одной секунде
-        const hours = Math.floor((total / (1000 * 60 * 60) % 24));
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        const seconds = Math.floor((total / 1000) % 60);
 
+        if (total <= 0) {        //если к нам приходят отрицательные значения, заменяем всё нулями
+            days = 0;
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
+        }
+
+        if (total > 0) {
+            days = Math.floor(total / (1000 * 60 * 60 * 24));     //1000 - кол-во миллисекунд в одной секунде
+            hours = Math.floor((total / (1000 * 60 * 60) % 24));
+            minutes = Math.floor((total / 1000 / 60) % 60);
+            seconds = Math.floor((total / 1000) % 60);
+        }
+        
         return {
             'total': total,      //есть возможность записать такой объект короче, вместо 'ключ: значение'
             'days': days,        //использовать просто названия переменных - {total, days, hours, minutes, seconds}
