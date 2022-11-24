@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function getZero(num) {                     //добавляем нолик, если число меньше 10
-        if (num >= 0 && num > 10) return num;
+        if (num >= 0 && num >= 10) return num;
         
         if (num >= 0 && num < 10) {
             return `0${num}`;
