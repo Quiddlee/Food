@@ -106,20 +106,34 @@ window.addEventListener('DOMContentLoaded', () => {
     //Modals
 
     const modalBtns = document.querySelectorAll('[data-modal]');
-    const modalWindow = document.querySelector('.modal');
+    const modal = document.querySelector('.modal');
 
     modalBtns.forEach(element => {
         element.addEventListener('click', () => {
-            modalWindow.style.display = 'block';
-            modalWindow.classList.add('fade');
+            modal.classList.add('show');
+            modal.classList.add('fade');
+            modal.classList.remove('hide');
+            document.body.style.overflow = 'hidden';            //убираем возможность скролла страницы, когда модальное окно открыто
         });
     });
 
-    modalWindow.addEventListener('click', (event) => {
+    function closeModalWindows () {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';          //чтобы вернуть деффолтное значение, можно оставить просто кавычки, браузер сам установит нужное значение
+    }
+
+    modal.addEventListener('click', (event) => {
         const target = event.target;
         
         if (target && target.classList.contains('modal') || target.classList.contains('modal__close')) {
-            modalWindow.style.display = 'none';
+            closeModalWindows();
         } 
+    });
+
+    document.addEventListener('keydown', (event) => {   //скрываем модальное окно по нажатию клавиши ESC
+        if (event.code === 'Escape' && modal.classList.contains('show')) {  
+            closeModalWindows();
+        }
     });
 });
