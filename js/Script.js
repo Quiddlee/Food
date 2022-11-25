@@ -102,4 +102,24 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     setClock('.timer', deadLine);
+
+    //Modals
+
+    const modalBtns = document.querySelectorAll('[data-modal]');
+    const modalWindow = document.querySelector('.modal');
+
+    modalBtns.forEach(element => {
+        element.addEventListener('click', () => {
+            modalWindow.style.display = 'block';
+            modalWindow.classList.add('fade');
+        });
+    });
+
+    modalWindow.addEventListener('click', (event) => {
+        const target = event.target;
+        
+        if (target && target.classList.contains('modal') || target.classList.contains('modal__close')) {
+            modalWindow.style.display = 'none';
+        } 
+    });
 });
