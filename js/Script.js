@@ -141,7 +141,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const modalTimerId = setTimeout(openModal, 30000);      //открываем модальное окно, после 30 секунд, какы пользователь зашёл на сайт
+    const modalTimerId = setTimeout(openModal, 30000);      //открываем модальное окно, после 30 секунд, как пользователь зашёл на сайт
 
     function showModalByScroll () {                                                                                   //мы складываем прокрутку и котент, который видит пользователь, если эти значения совпадают с полной высотой страницы - то пользователь долистал до конца
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) { //ставим -1px для уверености, чтобы скрипт отработал на 1 пиксель раньше и не бажил
