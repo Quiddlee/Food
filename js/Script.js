@@ -114,6 +114,7 @@ window.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('hide');
         document.body.style.overflow = 'hidden';            //убираем возможность скролла страницы, когда модальное окно открыто
         clearInterval(modalTimerId);
+        window.removeEventListener('scroll', showModalByScroll);
     } 
 
     modalBtns.forEach(element => {
@@ -141,7 +142,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const modalTimerId = setTimeout(openModal, 30000);      //открываем модальное окно, после 30 секунд, как пользователь зашёл на сайт
+    // const modalTimerId = setTimeout(openModal, 30000);      //открываем модальное окно, после 30 секунд, как пользователь зашёл на сайт
 
     function showModalByScroll () {                                                                                   //мы складываем прокрутку и котент, который видит пользователь, если эти значения совпадают с полной высотой страницы - то пользователь долистал до конца
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) { //ставим -1px для уверености, чтобы скрипт отработал на 1 пиксель раньше и не бажил
@@ -153,4 +154,68 @@ window.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', showModalByScroll);    //есть ещё возможность задать настройка обработчику событий: .addeventlistener('click', () => {
 
                                                                                                                           //},{once: true});         //тоесть обработчик сработает только один раз
+    //Используем классы для карточек
+
+    class MenuCard {
+        constructor(src, alt, title, descr, price, parentSelector) {
+            this.src = src;
+            this.alt = alt;
+            this.title = title;
+            this.descr = descr;
+            this.price = price;
+            this.parent = document.querySelector(parentSelector);
+            this.transfer = 27;
+            this.changeToUAH();
+        }
+
+        changeToUAH() {
+            this.price = this.price * this.transfer;
+        }
+
+        render() {
+            const element = document.createElement('div');
+
+            element.innerHTML = `   
+                <div class="menu__item">
+                    <img src=${this.src} alt=${this.alt}>
+                    <h3 class="menu__item-subtitle">${this.title}</h3>      
+                    <div class="menu__item-descr">${this.descr}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                    </div>
+                </div>
+            `;                                                                                      //создаём такуюже верстку, но с динамическими значениями
+
+            this.parent.append(element);
+        }
+    }
+
+    new MenuCard(
+        'img/tabs/vegy.jpg',
+        'vegy',
+        'Меню "Фитнес"',
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+        9,
+        '.menu .container'
+    ).render();                     //можем создать объект в таком виде, если он используется только один раз
+
+    new MenuCard(
+        'img/tabs/elite.jpg',
+        'elite',
+        'Меню "Премиум"',
+        'меню "Премиум" мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+        14,
+        '.menu .container'
+    ).render();
+
+    new MenuCard(
+        'img/tabs/post.jpg',
+        'post',
+        'Меню "Постное"',
+        'Меню "Постное" - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.!',
+        21,
+        '.menu .container'
+    ).render();
 });
