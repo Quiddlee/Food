@@ -24,7 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     hideTabContent();
     showTabContent();
-
+    
     tabsParent.addEventListener('click', (event) => {
         const target = event.target;
 
@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Timer
 
-    const deadLine = '2022-12-4';
+    const deadLine = '2023-2-4';
 
     function getTimeRemaining(endtime) {
         let days, hours, minutes, seconds;
@@ -142,7 +142,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // const modalTimerId = setTimeout(openModal, 30000);      //открываем модальное окно, после 30 секунд, как пользователь зашёл на сайт
+    const modalTimerId = setTimeout(openModal, 30000);      //открываем модальное окно, после 30 секунд, как пользователь зашёл на сайт
 
     function showModalByScroll () {                                                                                   //мы складываем прокрутку и котент, который видит пользователь, если эти значения совпадают с полной высотой страницы - то пользователь долистал до конца
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) { //ставим -1px для уверености, чтобы скрипт отработал на 1 пиксель раньше и не бажил
@@ -155,7 +155,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                                                                                                                           //},{once: true});         //тоесть обработчик сработает только один раз
     //Используем классы для карточек
-
+    console.log('wassup');
     class MenuCard {
         constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
@@ -230,4 +230,6 @@ window.addEventListener('DOMContentLoaded', () => {
         '.menu .container',
         'menu__item'
     ).render();
+
+    
 });
