@@ -40,7 +40,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Timer
 
-    const deadLine = '2023-2-4';
+    const now = Date.parse(new Date()) * 1.000361946;
+    const deadLine = new Date(now);
+    console.log(deadLine);
 
     function getTimeRemaining(endtime) {
         let days, hours, minutes, seconds;
@@ -155,7 +157,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                                                                                                                           //},{once: true});         //тоесть обработчик сработает только один раз
     //Используем классы для карточек
-    console.log('wassup');
+
     class MenuCard {
         constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
@@ -231,5 +233,63 @@ window.addEventListener('DOMContentLoaded', () => {
         'menu__item'
     ).render();
 
-    
+    //Forms
+
+    const forms = document.querySelectorAll('form');
+
+
+    const message = {
+        loading: 'Загрузка',
+        success: 'Спасибо! Мы с Вами скоро свяжемся',
+        failure: 'Что-то пошло не так...'
+    };
+
+
+    forms.forEach(item => {
+        postData(item);
+    });
+
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();                 // отменяем перезагрузку страницы, при отправке формы
+
+
+            const statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+            statusMessage.textContent = message.loading;
+            form.append(statusMessage);
+
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');                             //Чтобы инпуты работали корректно, обязательно в верстке у каждого инпута должен быть задан атрибут name
+            
+
+            request.setRequestHeader('Content-type', 'application/json');    //когда мы используем связку XMLHttpRequest + FormData - заголовок устанавливать не нужно, он устанавливается автоматически
+            const formData = new FormData(form);                             //объект FormData - автоматически формирует объект из формы, которую мы передали в скобочках
+
+
+            const object = {};
+            formData.forEach((value, key) => { // formData - это специальный объект, он имеет метод ForEach 
+                object[key] = value;
+            });
+
+
+            const json = JSON.stringify(object);
+            request.send(json);
+
+
+            request.addEventListener('load', () => {
+                console.log(request.response);
+                if (request.status === 200) {statusMessage.textContent = message.success;}
+                if (request.status !== 200) {statusMessage.textContent = message.failure;}
+
+
+                form.reset();
+                setTimeout(() => {
+                    statusMessage.remove();
+                }, 2000);
+            });
+        });
+    }
 });

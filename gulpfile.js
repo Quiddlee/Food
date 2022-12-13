@@ -6,10 +6,16 @@ const cleanCSS = require("gulp-clean-css");
 const postcss = require("gulp-postcss");
 const browsersync = require("browser-sync");
 
-const dist = "./dist";
+const dist = "/Programs/OServer/OSPanel/domains/Food";
 
 gulp.task("copy-html", () => {
     return gulp.src("./src/index.html")
+                .pipe(gulp.dest(dist))
+                .pipe(browsersync.stream());
+});
+
+gulp.task("copy-php", () => {
+    return gulp.src("./src/server.php")
                 .pipe(gulp.dest(dist))
                 .pipe(browsersync.stream());
 });
@@ -74,12 +80,15 @@ gulp.task("watch", () => {
     gulp.watch("./src/img/**/*.*", gulp.parallel("copy-assets"));
     gulp.watch("./src/scss/**/*.scss", gulp.parallel("build-sass"));
     gulp.watch("./src/js/**/*.js", gulp.parallel("build-js"));
+    gulp.watch("./src/server.php", gulp.parallel("copy-php"));
 });
 
-gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-sass", "build-js"));
+gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-sass", "build-js", "copy-php"));
 
 gulp.task("prod", () => {
     gulp.src("./src/index.html")
+        .pipe(gulp.dest(dist));
+    gulp.src("./src/server.php")
         .pipe(gulp.dest(dist));
     gulp.src("./src/img/**/*.*")
         .pipe(gulp.dest(dist + "/img"));
