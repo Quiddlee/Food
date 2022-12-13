@@ -239,7 +239,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //},{once: true});         //тоесть обработчик сработает только один раз
   //Используем классы для карточек
-  console.log('wassup');
+
   class MenuCard {
     constructor(src, alt, title, descr, price, parentSelector) {
       this.src = src;
