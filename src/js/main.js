@@ -168,7 +168,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', showModalByScroll);    //есть ещё возможность задать настройка обработчику событий: .addeventlistener('click', () => {
 
-                                                                                                                          //},{once: true});         //тоесть обработчик сработает только один раз
+    //                                                                                                                     },{once: true});         //тоесть обработчик сработает только один раз
     //                          Используем классы для карточек
 
     class MenuCard {
@@ -284,35 +284,32 @@ window.addEventListener('DOMContentLoaded', () => {
                 margin: 0 auto;
             `;
             form.insertAdjacentElement('afterend', statusMessage); //добавляем спиннер под формой, чтобы он не сдвигал верстку
-
-
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');                             //Чтобы инпуты работали корректно, обязательно в верстке у каждого инпута должен быть задан атрибут name
             
 
-            request.setRequestHeader('Content-type', 'application/json');    //когда мы используем связку XMLHttpRequest + FormData - заголовок устанавливать не нужно, он устанавливается автоматически
-            const formData = new FormData(form);                             //объект FormData - автоматически формирует объект из формы, которую мы передали в скобочках
-
-
+            const formData = new FormData(form);   // объект FormData - автоматически формирует объект из формы, которую мы передали в скобочках                                                                 //когда мы используем связку XMLHttpRequest + FormData - заголовок устанавливать не нужно, он устанавливается автоматически
             const object = {};
             formData.forEach((value, key) => { // formData - это специальный объект, он имеет метод ForEach 
                 object[key] = value;
             });
 
 
-            const json = JSON.stringify(object);
-            request.send(json);
+            fetch('serve1r.php', {          // у fetch() есть особенность, в случае когда у нас ошибка от сервера, не сработает reject, у нас просто поменяется статус на false
+                method: 'POST',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify(object)
 
 
-            request.addEventListener('load', () => {
-                console.log(request.response);
-                if (request.status === 200) {showThanksModal(message.success);}
-                if (request.status !== 200) {showThanksModal(message.failure);}
-
-
-                form.reset();
+            })
+            .then(data => data.text())                    // метод fetch(), дату превращает в текст 
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
                 statusMessage.remove();
-            });
+
+                
+            })
+            .catch(() => showThanksModal(message.failure))
+            .finally(() => form.reset());                                     // Чтобы инпуты работали корректно, обязательно в верстке у каждого инпута должен быть задан атрибут name
         });
     }
 
