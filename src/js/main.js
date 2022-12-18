@@ -220,38 +220,48 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    new MenuCard(
-        'img/tabs/vegy.jpg',
-        'vegy',
-        'Меню "Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        9,
-        '.menu .container',
-        'menu__item',
-        'big'
-    ).render();                     //можем создать объект в таком виде, если он используется только один раз
+    const getResource = async (url) => { 
+        const res = await fetch(url);
+        const errorMessage = `Could not fetch ${url}, status: ${res.status}`;
 
 
-    new MenuCard(
-        'img/tabs/elite.jpg',
-        'elite',
-        'Меню "Премиум"',
-        'меню "Премиум" мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-        14,
-        '.menu .container',
-        'menu__item'
-    ).render();
+        if (!res.ok) {throw new Error(errorMessage);}
+        return await res.json();
+    };
 
 
-    new MenuCard(
-        'img/tabs/post.jpg',
-        'post',
-        'Меню "Постное"',
-        'Меню "Постное" - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.!',
-        21,
-        '.menu .container',
-        'menu__item'
-    ).render();
+    // getResource('http://localhost:3000/menu')
+    // .then(data => {
+    //     data.forEach(({img, altimg, title, descr, price}) => {  // мы берём каждый элемент массива - объект, и деструктуризируем его на свойства
+    //         new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+    //     });
+    // });
+
+
+    getResource('http://localhost:3000/menu')
+        .then(data => createCard(data));
+
+    function createCard(data) {
+        data.forEach(({img, altimg, title, descr, price}) => { // альтернативный способ добавить карточки на сайт
+            const element = document.createElement('div');
+            element.classList.add('menu__item');
+
+
+            element.innerHTML = `
+                <img src=${img} alt=${altimg}>
+                <h3 class="menu__item-subtitle">${title}</h3>      
+                <div class="menu__item-descr">${descr}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${price}</span> грн/день</div>
+                </div>
+            `;
+
+
+            document.querySelector('.menu .container').append(element);
+        });
+    }
 
 
     //                                      Forms
@@ -268,11 +278,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
 
-    function postData(form) {
+    const postData = async (url, data) => { // async/await - синтаксический сахар, для работы с асинхронным кодом, условно говоря - js ждет, там где установлен оператор await, пока асинхронный код не выполнится
+        const res = await fetch(url, {      // у fetch() есть особенность, в случае когда у нас ошибка от сервера, не сработает reject, у нас просто поменяется статус на false
+            method: 'POST',
+            headers: {'Content-type': 'application/json'},
+            body: data
+        });
+
+        return await res.json();
+    };
+
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();                 // отменяем перезагрузку страницы, при отправке формы
 
@@ -284,23 +305,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 margin: 0 auto;
             `;
             form.insertAdjacentElement('afterend', statusMessage); //добавляем спиннер под формой, чтобы он не сдвигал верстку
-            
-
-            const formData = new FormData(form);   // объект FormData - автоматически формирует объект из формы, которую мы передали в скобочках                                                                 //когда мы используем связку XMLHttpRequest + FormData - заголовок устанавливать не нужно, он устанавливается автоматически
-            const object = {};
-            formData.forEach((value, key) => { // formData - это специальный объект, он имеет метод ForEach 
-                object[key] = value;
-            });
 
 
-            fetch('serve1r.php', {          // у fetch() есть особенность, в случае когда у нас ошибка от сервера, не сработает reject, у нас просто поменяется статус на false
-                method: 'POST',
-                headers: {'Content-type': 'application/json'},
-                body: JSON.stringify(object)
+            // объект FormData - автоматически формирует объект из формы, которую мы передали в скобочках
+            const formData = new FormData(form);  //formData - это специальный объект, он имеет метод ForEach            //когда мы используем связку XMLHttpRequest + FormData - заголовок устанавливать не нужно, он устанавливается автоматически
+            const json = JSON.stringify(Object.fromEntries(formData.entries())); // .entries() - формирует из объектов матрицу с данными / метод fromEntries конвертирует из матрицы обратно в объект
 
 
-            })
-            .then(data => data.text())                    // метод fetch(), дату превращает в текст 
+            postData('http://localhost:3000/requests', json)
             .then(data => {
                 console.log(data);
                 showThanksModal(message.success);
