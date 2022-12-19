@@ -250,7 +250,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     // getResource('http://localhost:3000/menu')
-    //     .then(data` => createCard(data));
+    //     .then(data => createCard(data));
 
     // function createCard(data) {
     //     data.forEach(({img, altimg, title, descr, price}) => {
@@ -365,7 +365,57 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // fetch('http://localhost:3000/menu')
-    // .then(data => data.json())
-    // .then(res => console.log(res));
+    //                                          slider
+
+
+    const slides = document.querySelectorAll('.offer__slide');
+    const totalSlides = document.querySelector('#total');
+    const currentSlide = document.querySelector('#current');
+    const sliderNext = document.querySelector('.offer__slider-next');
+    const sliderPrev = document.querySelector('.offer__slider-prev');
+    let slideNumber = 0;
+
+
+    totalSlides.innerHTML = (slides.length).toString();
+
+
+    const hideSlide = () => {
+        slides.forEach((slide) => {
+            slide.classList.remove('show', 'fade');
+            slide.classList.add('hide');
+        });
+    };
+    hideSlide();
+
+
+    const showSlide = (whichSlide = 0) => {
+        slides.forEach((slide, iter) => {
+            if (iter === whichSlide) {
+                slide.classList.remove('hide');
+                slide.classList.add('show', 'fade');
+                currentSlide.innerHTML = (slideNumber + 1).toString();
+            }
+        })
+    };
+    showSlide();
+
+
+    const nextSlide = (whichSlide) => {
+        hideSlide();
+        showSlide(whichSlide)
+    };
+
+
+    sliderNext.addEventListener('click', () => {
+        if (slideNumber === 3) return  nextSlide(slideNumber = 0);
+        nextSlide(slideNumber += 1);
+        currentSlide.innerHTML = (slideNumber + 1).toString();
+    });
+
+
+    sliderPrev.addEventListener('click', () => {
+        if (slideNumber === 0) return nextSlide(slideNumber = 3)
+        nextSlide(slideNumber -= 1);
+        currentSlide.innerHTML = (slideNumber + 1).toString();
+    });
 });

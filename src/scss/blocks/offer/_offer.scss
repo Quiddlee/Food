@@ -66,10 +66,12 @@
         &-prev {
             margin-right: 10px;
             cursor: pointer;
+            user-select: none;
         }
         &-next {
             margin-left: 10px;
             cursor: pointer;
+            user-select: none;
         }
         #current {
             font-size: 48px;
