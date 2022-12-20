@@ -373,11 +373,13 @@ window.addEventListener('DOMContentLoaded', () => {
     const currentSlide = document.querySelector('#current');
     const sliderNext = document.querySelector('.offer__slider-next');
     const sliderPrev = document.querySelector('.offer__slider-prev');
-    let slideNumber = 0;
+    const totalSlidesNumber = slides.length;
+    let slideNumber = 1;
 
 
-    currentSlide.innerHTML = slideNumber + 1;
-    totalSlides.innerHTML = slides.length;
+
+    currentSlide.innerHTML = `0${slideNumber}`;
+    totalSlides.innerHTML = totalSlidesNumber < 10 ? `0${totalSlidesNumber}` : totalSlidesNumber;
 
 
     const hideSlide = () => {
@@ -402,21 +404,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const sliderCountAndToggle = (whichSlide) => {
         hideSlide();
-        showSlide(whichSlide)
+        showSlide(whichSlide - 1);
 
 
-        currentSlide.innerHTML = whichSlide + 1;
+        if (whichSlide < 10) currentSlide.innerHTML = `0${whichSlide}`;
+        if (whichSlide >= 10) currentSlide.innerHTML = whichSlide;
     };
 
 
     sliderNext.addEventListener('click', () => {
-        if (slideNumber === 3) return  sliderCountAndToggle(slideNumber = 0);
+        if (slideNumber === totalSlidesNumber) return  sliderCountAndToggle(slideNumber = 1);
         sliderCountAndToggle(slideNumber += 1);
     });
 
 
     sliderPrev.addEventListener('click', () => {
-        if (slideNumber === 0) return sliderCountAndToggle(slideNumber = 3)
+        if (slideNumber === 1) return sliderCountAndToggle(slideNumber = totalSlidesNumber)
         sliderCountAndToggle(slideNumber -= 1);
     });
 });
