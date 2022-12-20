@@ -376,7 +376,8 @@ window.addEventListener('DOMContentLoaded', () => {
     let slideNumber = 0;
 
 
-    totalSlides.innerHTML = (slides.length).toString();
+    currentSlide.innerHTML = slideNumber + 1;
+    totalSlides.innerHTML = slides.length;
 
 
     const hideSlide = () => {
@@ -393,29 +394,29 @@ window.addEventListener('DOMContentLoaded', () => {
             if (iter === whichSlide) {
                 slide.classList.remove('hide');
                 slide.classList.add('show', 'fade');
-                currentSlide.innerHTML = (slideNumber + 1).toString();
             }
         })
     };
     showSlide();
 
 
-    const nextSlide = (whichSlide) => {
+    const sliderCountAndToggle = (whichSlide) => {
         hideSlide();
         showSlide(whichSlide)
+
+
+        currentSlide.innerHTML = whichSlide + 1;
     };
 
 
     sliderNext.addEventListener('click', () => {
-        if (slideNumber === 3) return  nextSlide(slideNumber = 0);
-        nextSlide(slideNumber += 1);
-        currentSlide.innerHTML = (slideNumber + 1).toString();
+        if (slideNumber === 3) return  sliderCountAndToggle(slideNumber = 0);
+        sliderCountAndToggle(slideNumber += 1);
     });
 
 
     sliderPrev.addEventListener('click', () => {
-        if (slideNumber === 0) return nextSlide(slideNumber = 3)
-        nextSlide(slideNumber -= 1);
-        currentSlide.innerHTML = (slideNumber + 1).toString();
+        if (slideNumber === 0) return sliderCountAndToggle(slideNumber = 3)
+        sliderCountAndToggle(slideNumber -= 1);
     });
 });
