@@ -429,6 +429,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     const slides = document.querySelectorAll('.offer__slide');
+    const slider = document.querySelector('.offer__slider');
     const prev = document.querySelector('.offer__slider-prev');
     const next = document.querySelector('.offer__slider-next');
     const totalSlides = document.querySelector('#total');
@@ -438,8 +439,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const width = window.getComputedStyle(slidesWrapper).width;
     let slideIndex = 1;
     let offset = 0;
-
-
 
 
     // showSlides(slideIndex);
@@ -473,12 +472,21 @@ window.addEventListener('DOMContentLoaded', () => {
     //                                  carousel slider
 
 
+    const showCurrentSlide = () => {
+        if (slideIndex < 10) current.textContent = `0${slideIndex}`;
+        if (slideIndex >= 10) current.textContent = slideIndex;
+    };
+
+
+    const showActiveDot = () => {
+        dots.forEach(dot => dot.style.opacity = '.5');
+        dots[slideIndex - 1].style.opacity = 1;
+    };
+
+
     if (slides.length < 10) totalSlides.textContent = `0${slides.length}`;
     else totalSlides.textContent = slides.length;
-
-
-    if (slideIndex >= 10) current.textContent = slideIndex;
-    else current.textContent = `0${slideIndex}`;
+    showCurrentSlide();
 
 
     slidesField.style.width = `${100 * slides.length}%`;
@@ -486,13 +494,34 @@ window.addEventListener('DOMContentLoaded', () => {
     slidesField.style.transition = '0.5s all';
     slidesWrapper.style.overflow = 'hidden';            // overflow hidden - скрывает все элементы, которые не помещаются в родителя
     slides.forEach(slide => slide.style.width = width);
+    slider.style.position = 'relative';
 
 
+    const indicators = document.createElement('ol');
+    const dots = [];
+
+
+    indicators.classList.add('carousel-indicators');
+    slider.append(indicators);
+
+
+    for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('li');
+
+
+        dot.setAttribute('data-slide-to', i + 1);
+        dot.classList.add('dot');
+        if (i === 0) dot.style.opacity = 1  ;
+
+
+        indicators.append(dot);
+        dots.push(dot);
+    }
+
+
+    const slidesWidth = +width.slice(0, width.length - 2);
+    const slidesNumber = slides.length - 1;
     next.addEventListener('click', () => {
-        const slidesWidth = +width.slice(0, width.length - 2);
-        const slidesNumber = slides.length - 1;
-
-
         if (offset === slidesWidth * slidesNumber) offset = 0;
         else offset += slidesWidth;
         slidesField.style.transform = `translateX(-${offset}px)`;
@@ -500,21 +529,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (slideIndex === slides.length) slideIndex = 1;
         else slideIndex++;
+        showCurrentSlide();
 
 
-        if (slideIndex < 10) current.textContent = `0${slideIndex}`;
-        if (slideIndex >= 10) current.textContent = slideIndex;
-
-
-        toggleSliderDots(slideIndex - 1);
+        showActiveDot();
+        // toggleSliderDots(slideIndex - 1);
     });
 
 
     prev.addEventListener('click', () => {
-        const slidesWidth = +width.slice(0, width.length - 2);
-        const slidesNumber = slides.length - 1;
-
-
         if (offset === 0) offset = slidesWidth * slidesNumber;
         else offset -= slidesWidth;
         slidesField.style.transform = `translateX(-${offset}px)`;
@@ -522,13 +545,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (slideIndex === 1) slideIndex = slides.length;
         else slideIndex--;
+        showCurrentSlide();
 
 
-        if (slideIndex < 10) current.textContent = `0${slideIndex}`;
-        if (slideIndex >= 10) current.textContent = slideIndex;
-
-
-        toggleSliderDots(slideIndex - 1);
+        showActiveDot();
+        // toggleSliderDots(slideIndex - 1);
     });
 
 
@@ -536,47 +557,65 @@ window.addEventListener('DOMContentLoaded', () => {
     //                                   self task
 
 
-    const slider = document.querySelector('.offer__slider');
-    const dotsWrapper = document.createElement('div');
+    // const slider = document.querySelector('.offer__slider');
+    // const dotsWrapper = document.createElement('div');
+    //
+    //
+    // dotsWrapper.classList.add('carousel-indicators');
+    // slider.style.position = 'relative';
+    // slider.append(dotsWrapper);
+    //
+    //
+    // function toggleSliderDots(whichDot) {
+    //     dotsWrapper.getElementsByClassName('active')[0].classList.remove('active');
+    //     dotsWrapper.children[whichDot].classList.add('active');
+    // }
+    //
+    //
+    // function toggleSlidesWithDots(whichDot) {
+    //     offset = 650;
+    //     offset *= whichDot;
+    //     slidesField.style.transform = `translateX(-${offset}px)`;
+    // }
+    //
+    //
+    // for (let i = 0; i < slides.length; i++) {
+    //     dotsWrapper.append(document.createElement('ol'));
+    // }
+    // const dots = dotsWrapper.querySelectorAll('ol');
+    //
+    //
+    // dots.forEach((dot, iter) => {
+    //     if (iter === 0) dot.classList.add('active');
+    //     dot.classList.add('dot')
+    //
+    //
+    //     dot.addEventListener('click', () => {
+    //         if (iter + 1 < 10) current.textContent = `0${iter + 1}`;
+    //         if (iter + 1 >= 10) current.textContent = iter + 1;
+    //
+    //
+    //         toggleSliderDots(iter);
+    //         toggleSlidesWithDots(iter);
+    //         slideIndex = iter + 1;
+    //     })
+    // });
+
+    //                                  slider
+    //                              lecture rework
 
 
-    dotsWrapper.classList.add('carousel-indicators');
-    slider.style.position = 'relative';
-    slider.append(dotsWrapper);
+    dots.forEach(dot => {
+       dot.addEventListener('click', (event) => {
+            const slideTo = event.target.getAttribute('data-slide-to');
+            slideIndex = slideTo;
+            offset =  slidesWidth * (slideTo - 1);
+            showCurrentSlide();
 
 
-    function toggleSliderDots(whichDot) {
-        dotsWrapper.getElementsByClassName('active')[0].classList.remove('active');
-        dotsWrapper.children[whichDot].classList.add('active');
-    }
-
-
-    function toggleSlidesWithDots(whichDot) {
-        offset = 650;
-        offset *= whichDot;
-        slidesField.style.transform = `translateX(-${offset}px)`;
-    }
-
-
-    for (let i = 0; i < slides.length; i++) {
-        dotsWrapper.append(document.createElement('span'));
-    }
-    const dots = dotsWrapper.querySelectorAll('span');
-
-
-    dots.forEach((dot, iter) => {
-        if (iter === 0) dot.classList.add('active');
-        dot.classList.add('dot')
-
-
-        dot.addEventListener('click', () => {
-            if (iter + 1 < 10) current.textContent = `0${iter + 1}`;
-            if (iter + 1 >= 10) current.textContent = iter + 1;
-
-
-            toggleSliderDots(iter);
-            toggleSlidesWithDots(iter);
-            slideIndex = iter + 1;
-        })
+            slidesField.style.transform = `translateX(-${offset}px)`;
+            showActiveDot();
+       });
     });
 });
+
