@@ -472,7 +472,7 @@ window.addEventListener('DOMContentLoaded', () => {
     //                                  carousel slider
 
 
-    const showCurrentSlide = () => {
+    const showCurrentSlideIndex = () => {
         if (slideIndex < 10) current.textContent = `0${slideIndex}`;
         if (slideIndex >= 10) current.textContent = slideIndex;
     };
@@ -486,7 +486,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (slides.length < 10) totalSlides.textContent = `0${slides.length}`;
     else totalSlides.textContent = slides.length;
-    showCurrentSlide();
+    showCurrentSlideIndex();
 
 
     slidesField.style.width = `${100 * slides.length}%`;
@@ -529,7 +529,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (slideIndex === slides.length) slideIndex = 1;
         else slideIndex++;
-        showCurrentSlide();
+        showCurrentSlideIndex();
 
 
         showActiveDot();
@@ -545,7 +545,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (slideIndex === 1) slideIndex = slides.length;
         else slideIndex--;
-        showCurrentSlide();
+        showCurrentSlideIndex();
 
 
         showActiveDot();
@@ -610,7 +610,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const slideTo = event.target.getAttribute('data-slide-to');
             slideIndex = slideTo;
             offset =  slidesWidth * (slideTo - 1);
-            showCurrentSlide();
+            showCurrentSlideIndex();
 
 
             slidesField.style.transform = `translateX(-${offset}px)`;
