@@ -484,6 +484,11 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
 
+    const createNumberFromString = (string) => {
+        return +string.replace(/\D/g, '');
+    };
+
+
     if (slides.length < 10) totalSlides.textContent = `0${slides.length}`;
     else totalSlides.textContent = slides.length;
     showCurrentSlideIndex();
@@ -519,7 +524,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    const slidesWidth = +width.slice(0, width.length - 2);
+    const slidesWidth = createNumberFromString(width);
     const slidesNumber = slides.length - 1;
     next.addEventListener('click', () => {
         if (offset === slidesWidth * slidesNumber) offset = 0;
@@ -600,6 +605,7 @@ window.addEventListener('DOMContentLoaded', () => {
     //         slideIndex = iter + 1;
     //     })
     // });
+
 
     //                                  slider
     //                              lecture rework
