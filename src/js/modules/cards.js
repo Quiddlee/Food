@@ -1,3 +1,6 @@
+import {getResource} from "../services/cervices";
+
+
 function cards() {
     //                          Используем классы для карточек
 
@@ -50,30 +53,20 @@ function cards() {
     }
 
 
-    // const getResource = async (url) => {
-    //     const res = await fetch(url);
-    //     const errorMessage = `Could not fetch ${url}, status: ${res.status}`;
-    //
-    //
-    //     if (!res.ok) {throw new Error(errorMessage);}
-    //     return await res.json();
-    // };
-
-
-    // getResource('http://localhost:3000/menu')
-    // .then(data => {                 // мы берём каждый элемент массива - объект, и деструктуризируем его на свойства
-    //     data.forEach(({img, altimg, title, descr, price}) => {
-    //         new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
-    //     });
-    // });
-
-
-    axios.get('http://localhost:3000/menu')
-        .then(data => {                // мы берём каждый элемент массива - объект, и деструктуризируем его на свойства
-            data.data.forEach(({img, altimg, title, descr, price}) => {
-                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
-            });
+    getResource('http://localhost:3000/menu')
+    .then(data => {                 // мы берём каждый элемент массива - объект, и де структуризируем его на свойства
+        data.forEach(({img, altimg, title, descr, price}) => {
+            new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
         });
+    });
+
+
+    // axios.get('http://localhost:3000/menu')
+    //     .then(data => {              // мы берём каждый элемент массива - объект, и деструктуризируем его на свойства
+    //         data.data.forEach(({img, altimg, title, descr, price}) => {
+    //             new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+    //         });
+    //     });
 
 
     //                  альтернативный способ добавить карточки на сайт

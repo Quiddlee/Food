@@ -1,4 +1,4 @@
-function slider() {
+function slider({container, slide, nextArrow, prevArrow, totalCounter, currentCounter, wrapper, field}) {
     //                                          Slider
     //                                         self task
 
@@ -62,14 +62,14 @@ function slider() {
     //                               slider lecture rework
 
 
-    const slides = document.querySelectorAll('.offer__slide');
-    const slider = document.querySelector('.offer__slider');
-    const prev = document.querySelector('.offer__slider-prev');
-    const next = document.querySelector('.offer__slider-next');
-    const totalSlides = document.querySelector('#total');
-    const current = document.querySelector('#current');
-    const slidesWrapper = document.querySelector('.offer__slider-wrapper');
-    const slidesField = document .querySelector('.offer__slider-inner');
+    const slides = document.querySelectorAll(slide);
+    const slider = document.querySelector(container);
+    const prev = document.querySelector(prevArrow);
+    const next = document.querySelector(nextArrow);
+    const totalSlides = document.querySelector(totalCounter);
+    const current = document.querySelector(currentCounter);
+    const slidesWrapper = document.querySelector(wrapper);
+    const slidesField = document .querySelector(field);
     const width = window.getComputedStyle(slidesWrapper).width;
     let slideIndex = 1;
     let offset = 0;

@@ -1,8 +1,12 @@
-function forms() {
+import {closeModal, openModal} from "./modal";
+import {postData} from "../services/cervices";
+
+
+function forms(formSelector, modalTimerId) {
     //                                      Forms
 
 
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll(formSelector);
 
 
     const message = {
@@ -16,17 +20,6 @@ function forms() {
         bindPostData(item);
     });
 
-
-    // async/await - синтаксический сахар, для работы с асинхронным кодом, условно говоря - js ждет,
-    const postData = async (url, data) => { // там где установлен оператор await, пока асинхронный код не выполнится
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {'Content-type': 'application/json'},
-            body: data                      // у fetch() есть особенность, в случае когда у нас ошибка
-        });                                 // от сервера, не сработает reject, у нас просто поменяется статус на false
-
-        return await res.json();
-    };
 
 
     function bindPostData(form) {
@@ -75,7 +68,7 @@ function forms() {
 
 
         prevModalDialog.classList.add('hide');
-        openModal();
+        openModal('.modal', modalTimerId);
 
 
         const thanksModal = document.createElement('div');
@@ -93,7 +86,7 @@ function forms() {
             thanksModal.remove();
             prevModalDialog.classList.add('show');
             prevModalDialog.classList.remove('hide');
-            closeModal();
+            closeModal('.modal');
         }, 4000);
     }
 }

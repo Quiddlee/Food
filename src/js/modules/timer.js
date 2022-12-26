@@ -1,13 +1,9 @@
-function timer() {
+function timer(id, deadLine) {
     //                                      Timer
 
 
-    const now = Date.parse(new Date()) * 1.000361946;
-    const deadLine = new Date(now);
-
-
     function getTimeRemaining(endtime) {
-        let days, hours, minutes, seconds;                      // вычисляем разницу между дедлайном и датой пользователя
+        let days, hours, minutes, seconds;                     // вычисляем разницу между дедлайном и датой пользователя
         const total = Date.parse(endtime) - Date.parse(new Date());
 
 
@@ -49,7 +45,7 @@ function timer() {
         const hours = timer.querySelector('#hours');
         const minutes = timer.querySelector('#minutes');
         const seconds = timer.querySelector('#seconds');                           // устанавливем таймеру интервал,
-        const timeInterval = setInterval(updateClock, 1000);            // чтобы он обновлялся каждую секунду
+        const timeInterval = setInterval(updateClock, 1000);           // чтобы он обновлялся каждую секунду
         updateClock();           // вызываем функцию, чтобы при обновлении страницы, таймер не прыгал
 
 
@@ -67,7 +63,7 @@ function timer() {
             if (timerData.total <= 0) {clearInterval(timeInterval);}    // как только таймер дойдет до 0
         }                                                                       // мы его останавливаем
     }
-    setClock('.timer', deadLine);
+    setClock(id, deadLine);
 }
 
 

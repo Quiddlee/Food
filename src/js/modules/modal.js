@@ -1,55 +1,63 @@
-function modal() {
+function openModal (modalSelector, modalTimerId, showModalByScroll) {
+    const modal = document.querySelector(modalSelector);
+
+
+    modal.classList.add('show');
+    modal.classList.add('fade');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';  //убираем возможность скролла страницы, когда модальное окно открыто
+
+
+    console.log(modalTimerId);
+    if (modalTimerId) clearInterval(modalTimerId);
+    window.removeEventListener('scroll', showModalByScroll);
+}
+
+
+function closeModal (modalSelector) {
+    const modal = document.querySelector(modalSelector);
+
+
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}   //чтобы вернуть дефолтное значение, можно оставить просто кавычки, браузер сам установит нужное значение
+
+
+function modal(triggerSelector, modalSelector, modalTimerId) {
     //                                      Modals
 
 
-    const modalBtns = document.querySelectorAll('[data-modal]');
-    const modal = document.querySelector('.modal');
-
-
-    function openModal () {
-        modal.classList.add('show');
-        modal.classList.add('fade');
-        modal.classList.remove('hide');
-        document.body.style.overflow = 'hidden';  //убираем возможность скролла страницы, когда модальное окно открыто
-        clearInterval(modalTimerId);
-        window.removeEventListener('scroll', showModalByScroll);
-    }
+    const modalBtns = document.querySelectorAll(triggerSelector);
+    const modal = document.querySelector(modalSelector);
 
 
     modalBtns.forEach(element => {
-        element.addEventListener('click', openModal); //когда вставляем call back функцию, скобочки не ставим
-    });
-
-
-    function closeModal () {
-        modal.classList.add('hide');
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }   //чтобы вернуть деффолтное значение, можно оставить просто кавычки, браузер сам установит нужное значение
+        element.addEventListener('click', () => openModal(modalSelector, modalTimerId, showModalByScroll));
+    }); // если нам нужно передать в call back функцию аргумент, оборачиваем её в анонимную функцию () => openModal(arg)
 
 
     modal.addEventListener('click', (event) => {
-        if (event.target === modal || event.target.getAttribute('data-close') === '') {closeModal();}
+        if (event.target === modal || event.target.getAttribute('data-close') === '') {
+            closeModal(modalSelector);
+        }
     });
 
 
     document.addEventListener('keydown', (event) => {       //скрываем модальное окно по нажатию клавиши ESC
-        if (event.code === 'Escape' && modal.classList.contains('show')) {closeModal();}
+        if (event.code === 'Escape' && modal.classList.contains('show')) {
+            closeModal(modalSelector);
+        }
     });
-                                            //открываем модальное окно, после 30 секунд, как пользователь зашёл на сайт
-    const modalTimerId = setTimeout(openModal, 30000);
 
 
-    // мы складываем прокрутку и котент, который видит пользователь,
-    // если эти значения совпадают с полной высотой страницы - то пользователь долистал до конца
-    function showModalByScroll () {  //ставим -1px для уверености, чтобы скрипт отработал на 1 пиксель раньше и не бажил
+    // мы складываем прокрутку и контент, который видит пользователь,
+    // если эти значения совпадают с полной высотой страницы - то пользователь до листал до конца
+    function showModalByScroll() { //ставим -1px для уверенности, чтобы скрипт отработал на 1 пиксель раньше и не бажил
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight -1) {
-            openModal();
-            window.removeEventListener('scroll', showModalByScroll);
+            openModal(modalSelector, modalTimerId, showModalByScroll);
         }
     }
-
-
     window.addEventListener('scroll', showModalByScroll);
 
 
@@ -60,3 +68,4 @@ function modal() {
 
 
 export default modal;
+export {closeModal, openModal};
