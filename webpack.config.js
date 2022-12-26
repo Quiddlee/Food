@@ -7,7 +7,7 @@ module.exports = {
   entry: './src/js/main.js',
   output: {
     filename: 'bundle.js',
-    path: __dirname + 'Programs/OServer/OSPanel/domains/Food'
+    path: __dirname + '/dist/js'
   },
   watch: true,
 
