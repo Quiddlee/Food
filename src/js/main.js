@@ -1,6 +1,11 @@
+    require('es6-promise').polyfill();
+    import 'nodelist-foreach-polyfill';
+
+
+
+    import modal, {openModal} from './modules/modal';
     import calculator  from './modules/calculator';
     import slider  from './modules/slider';
-    import modal, {openModal} from './modules/modal';
     import timer  from './modules/timer';
     import cards  from './modules/cards';
     import forms  from './modules/forms';
@@ -12,7 +17,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const modalTimerId = setTimeout(() => openModal('.modal', modalTimerId), 30000);
 
 
-    calculator();
+    tabs('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
+    timer('.timer', new Date(Date.parse(new Date()) * 1.000361708));
+    modal('[data-modal]', '.modal', modalTimerId);
+    forms('form', modalTimerId);
     slider({
         container: '.offer__slider',
         slide: '.offer__slide',
@@ -23,10 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
         wrapper: '.offer__slider-wrapper',
         field: '.offer__slider-inner'
     });
-    modal('[data-modal]', '.modal', modalTimerId);
-    timer('.timer', new Date(Date.parse(new Date()) * 1.000361708));
+    calculator();
     cards();
-    forms('form', modalTimerId);
-    tabs('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
 });
 
