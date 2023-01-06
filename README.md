@@ -1,4 +1,5 @@
 # Food | JavaScript course project
+**Preview: https://quiddlee.github.io/Food/**
 
 **Stack:**
 1. Native JavaScript
