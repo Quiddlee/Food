@@ -28,6 +28,7 @@ function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, classActive
     hideTabContent();
     showTabContent();
 
+
     tabsParent.addEventListener('click', (event) => {
         const target = event.target;
 
